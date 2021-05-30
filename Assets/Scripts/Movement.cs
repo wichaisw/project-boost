@@ -7,10 +7,12 @@ public class Movement : MonoBehaviour
     Rigidbody rb;
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] float rotationThrust = 200f;
+    AudioSource rocketSound;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rocketSound = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -23,6 +25,14 @@ public class Movement : MonoBehaviour
         if(Input.GetKey(KeyCode.Space)) 
         {
             rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
+            if(!rocketSound.isPlaying)
+            {
+                rocketSound.volume = 1f;
+                rocketSound.Play();
+            }
+        } else {
+            rocketSound.volume = 0f;
+            rocketSound.Stop();
         }
     }
     void ProcessRotation() 
