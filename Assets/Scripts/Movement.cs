@@ -40,7 +40,9 @@ public class Movement : MonoBehaviour
 
     private void ApplyRotation(float rotateThisFrame)
     {
-    transform.Rotate(Vector3.forward  * Time.deltaTime * rotateThisFrame);
+        rb.freezeRotation = true; // disable third-party physics
+        transform.Rotate(Vector3.forward  * Time.deltaTime * rotateThisFrame);
+        rb.freezeRotation = false;
     }
 
 }
