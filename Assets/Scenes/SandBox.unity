@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainThrust: 1000
+  rotationThrust: 0
 --- !u!65 &157756958
 BoxCollider:
   m_ObjectHideFlags: 0
