@@ -9,10 +9,13 @@ public class Movement : MonoBehaviour
     [SerializeField] float rotationThrust = 200f;
     AudioSource rocketSound;
 
+    Quaternion rotationConstraints;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rocketSound = GetComponent<AudioSource>();
+        
     }
 
     void Update()
@@ -27,8 +30,8 @@ public class Movement : MonoBehaviour
             rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
             if(!rocketSound.isPlaying)
             {
-                rocketSound.volume = 1f;
                 rocketSound.Play();
+                rocketSound.volume = 1f;
             }
         } else {
             rocketSound.volume = 0f;
@@ -53,6 +56,7 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true; // disable third-party physics
         transform.Rotate(Vector3.forward  * Time.deltaTime * rotateThisFrame);
         rb.freezeRotation = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ; 
     }
 
 }
