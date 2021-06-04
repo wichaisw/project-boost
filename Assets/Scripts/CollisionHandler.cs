@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+
     private void OnCollisionEnter(Collision other) {
         switch(other.gameObject.tag) {
             case "Friendly":
@@ -17,18 +18,31 @@ public class CollisionHandler : MonoBehaviour
                 break;
             default:
                 Debug.Log("Crashed!");
-                ReloadLevel();
+                StartCrashSequence();
                 break;
         }
     }
+    
+    void StartCrashSequence() 
+    {
+        Movement movement = GetComponent<Movement>();
+        movement.rocketSound.Stop(); 
+        if(!movement.gameOverSound.isPlaying) 
+        {
+            movement.gameOverSound.Play();
+        }
+        movement.enabled = false;
+        
+        Invoke("ReloadLevel", 1.5f);
+    }
 
-    private static void ReloadLevel()
+    void ReloadLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
     }
 
-    private static void LoadNextLevel()
+    void LoadNextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;

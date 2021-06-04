@@ -7,14 +7,19 @@ public class Movement : MonoBehaviour
     Rigidbody rb;
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] float rotationThrust = 200f;
-    AudioSource rocketSound;
+
+    public AudioSource[] sounds;
+    public AudioSource rocketSound;
+    public AudioSource gameOverSound;
 
     Quaternion rotationConstraints;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rocketSound = GetComponent<AudioSource>();
+        sounds = GetComponents<AudioSource>();
+        rocketSound = sounds[0];
+        gameOverSound = sounds[1];
         
     }
 
