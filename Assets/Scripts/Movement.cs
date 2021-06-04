@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
     public AudioSource[] sounds;
     public AudioSource rocketSound;
     public AudioSource gameOverSound;
+    public AudioSource stageClearSound;
 
     Quaternion rotationConstraints;
 
@@ -20,7 +21,7 @@ public class Movement : MonoBehaviour
         sounds = GetComponents<AudioSource>();
         rocketSound = sounds[0];
         gameOverSound = sounds[1];
-        
+        stageClearSound = sounds[2];        
     }
 
     void Update()

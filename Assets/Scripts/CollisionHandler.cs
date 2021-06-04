@@ -3,6 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+    Movement movement;
+    bool isStageCleared = false;
+    bool isCrashed = false;
+    [SerializeField] float stageClearDelay = 3f;
+    [SerializeField] float crashDelay = 1.5f;
+    void Start()
+    {   
+        isStageCleared = false;
+        isCrashed = false;
+        movement = GetComponent<Movement>();
+    }
 
     private void OnCollisionEnter(Collision other) {
         switch(other.gameObject.tag) {
@@ -13,27 +24,45 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("collide Fuel");
                 break;
             case "Finish":
-                Debug.Log("collide Finish");
-                LoadNextLevel();
+                if(!isCrashed) 
+                {   
+                    isStageCleared = true;
+                    Debug.Log("collide Finish");
+                    StartStageClearSequence();
+                }
                 break;
             default:
-                Debug.Log("Crashed!");
-                StartCrashSequence();
+                if(!isStageCleared)
+                {
+                    isCrashed = true;
+                    Debug.Log("Crashed!");
+                    StartCrashSequence();
+
+                }
                 break;
         }
     }
     
     void StartCrashSequence() 
     {
-        Movement movement = GetComponent<Movement>();
+        movement.enabled = false;
         movement.rocketSound.Stop(); 
         if(!movement.gameOverSound.isPlaying) 
         {
             movement.gameOverSound.Play();
         }
-        movement.enabled = false;
         
-        Invoke("ReloadLevel", 1.5f);
+        Invoke("ReloadLevel", crashDelay);
+    }
+
+    void StartStageClearSequence() {
+        movement.enabled = false;
+        movement.rocketSound.Stop();
+        if(!movement.stageClearSound.isPlaying)
+        {
+            movement.stageClearSound.Play();
+        }
+        Invoke("LoadNextLevel", stageClearDelay);
     }
 
     void ReloadLevel()
