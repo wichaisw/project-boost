@@ -5,13 +5,13 @@ public class CollisionHandler : MonoBehaviour
 {
     Movement movement;
     bool isStageCleared = false;
-    bool isCrashed = false;
+    bool isAlive = true;
     [SerializeField] float stageClearDelay = 3f;
     [SerializeField] float crashDelay = 1.5f;
     void Start()
     {   
         isStageCleared = false;
-        isCrashed = false;
+        isAlive = true;
         movement = GetComponent<Movement>();
     }
 
@@ -24,7 +24,7 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("collide Fuel");
                 break;
             case "Finish":
-                if(!isCrashed) 
+                if(isAlive) 
                 {   
                     isStageCleared = true;
                     Debug.Log("collide Finish");
@@ -34,7 +34,7 @@ public class CollisionHandler : MonoBehaviour
             default:
                 if(!isStageCleared)
                 {
-                    isCrashed = true;
+                    isAlive = false;
                     Debug.Log("Crashed!");
                     StartCrashSequence();
 
