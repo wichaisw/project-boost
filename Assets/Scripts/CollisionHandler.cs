@@ -3,15 +3,26 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
-    Movement movement;
-    bool isStageCleared = false;
-    bool isAlive = true;
+    // PARAMETERS
     [SerializeField] float stageClearDelay = 3f;
     [SerializeField] float crashDelay = 1.5f;
+    [SerializeField] public AudioClip gameOverSound;
+    [SerializeField] public AudioClip stageClearSound;
+
+    // CACHE
+    Movement movement;
+    AudioSource audioSource;
+
+    // STATES
+    bool isStageCleared = false;
+    bool isAlive = true;
+    bool isTransitioning = false;
+
     void Start()
     {   
         isStageCleared = false;
         isAlive = true;
+        audioSource = GetComponent<AudioSource>();
         movement = GetComponent<Movement>();
     }
 
@@ -45,23 +56,24 @@ public class CollisionHandler : MonoBehaviour
     
     void StartCrashSequence() 
     {
+        if(isTransitioning) { return; }
+
+        isTransitioning = true;
         movement.enabled = false;
-        movement.rocketSound.Stop(); 
-        if(!movement.gameOverSound.isPlaying) 
-        {
-            movement.gameOverSound.Play();
-        }
+        movement.audioSource.Stop(); 
+        audioSource.PlayOneShot(gameOverSound);
         
         Invoke("ReloadLevel", crashDelay);
     }
 
     void StartStageClearSequence() {
+
+        if(isTransitioning) { return; }
+
         movement.enabled = false;
-        movement.rocketSound.Stop();
-        if(!movement.stageClearSound.isPlaying)
-        {
-            movement.stageClearSound.Play();
-        }
+        movement.audioSource.Stop();
+        audioSource.PlayOneShot(stageClearSound);
+
         Invoke("LoadNextLevel", stageClearDelay);
     }
 

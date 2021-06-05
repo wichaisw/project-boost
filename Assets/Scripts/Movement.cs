@@ -4,24 +4,27 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    Rigidbody rb;
+    // PARAMETERS
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] float rotationThrust = 200f;
-
-    public AudioSource[] sounds;
-    public AudioSource rocketSound;
-    public AudioSource gameOverSound;
-    public AudioSource stageClearSound;
-
+    [SerializeField] public AudioClip rocketSound;
     Quaternion rotationConstraints;
+
+
+    // CACHE
+    Rigidbody rb;
+    public AudioSource audioSource;
+    // public AudioSource[] sounds;
+
+    
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        sounds = GetComponents<AudioSource>();
-        rocketSound = sounds[0];
-        gameOverSound = sounds[1];
-        stageClearSound = sounds[2];        
+        audioSource = GetComponent<AudioSource>();
+        // rocketSound = sounds[0];
+        // gameOverSound = sounds[1];
+        // stageClearSound = sounds[2];        
     }
 
     void Update()
@@ -34,14 +37,18 @@ public class Movement : MonoBehaviour
         if(Input.GetKey(KeyCode.Space)) 
         {
             rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
-            if(!rocketSound.isPlaying)
-            {
-                rocketSound.Play();
-                rocketSound.volume = 1f;
+            // if(!rocketSound.isPlaying)
+            // {
+            //     rocketSound.Play();
+            //     rocketSound.volume = 1f;
+            // }
+            if(!audioSource.isPlaying) {
+                audioSource.PlayOneShot(rocketSound);
             }
         } else {
-            rocketSound.volume = 0f;
-            rocketSound.Stop();
+            audioSource.Stop();
+            // rocketSound.volume = 0f;
+            // rocketSound.Stop();
         }
     }
     void ProcessRotation() 
