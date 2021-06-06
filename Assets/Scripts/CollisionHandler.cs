@@ -8,6 +8,8 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] float crashDelay = 1.5f;
     [SerializeField] public AudioClip gameOverSound;
     [SerializeField] public AudioClip stageClearSound;
+    [SerializeField] ParticleSystem gameOverParticles;
+    [SerializeField] ParticleSystem stageClearParticles;
 
     // CACHE
     Movement movement;
@@ -29,7 +31,6 @@ public class CollisionHandler : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         switch(other.gameObject.tag) {
             case "Friendly":
-                Debug.Log("collide Friendly");
                 break;
             case "Fuel":
                 Debug.Log("collide Fuel");
@@ -38,7 +39,6 @@ public class CollisionHandler : MonoBehaviour
                 if(isAlive) 
                 {   
                     isStageCleared = true;
-                    Debug.Log("collide Finish");
                     StartStageClearSequence();
                 }
                 break;
@@ -46,7 +46,6 @@ public class CollisionHandler : MonoBehaviour
                 if(!isStageCleared)
                 {
                     isAlive = false;
-                    Debug.Log("Crashed!");
                     StartCrashSequence();
 
                 }
@@ -59,8 +58,9 @@ public class CollisionHandler : MonoBehaviour
         if(isTransitioning) { return; }
 
         isTransitioning = true;
+        gameOverParticles.Play();
         movement.enabled = false;
-        movement.audioSource.Stop(); 
+        audioSource.Stop(); 
         audioSource.PlayOneShot(gameOverSound);
         
         Invoke("ReloadLevel", crashDelay);
@@ -69,9 +69,10 @@ public class CollisionHandler : MonoBehaviour
     void StartStageClearSequence() {
 
         if(isTransitioning) { return; }
-
+        stageClearParticles.Play();
+        isTransitioning = true;
         movement.enabled = false;
-        movement.audioSource.Stop();
+        audioSource.Stop();
         audioSource.PlayOneShot(stageClearSound);
 
         Invoke("LoadNextLevel", stageClearDelay);
