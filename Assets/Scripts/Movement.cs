@@ -8,23 +8,20 @@ public class Movement : MonoBehaviour
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] float rotationThrust = 200f;
     [SerializeField] public AudioClip rocketSound;
+    [SerializeField] ParticleSystem mainBoosterParticles;
+    [SerializeField] ParticleSystem leftThrusterParticles;
+    [SerializeField] ParticleSystem rightThrusterParticles;
     Quaternion rotationConstraints;
 
 
     // CACHE
     Rigidbody rb;
-    public AudioSource audioSource;
-    // public AudioSource[] sounds;
-
-    
+    public AudioSource audioSource;    
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
-        // rocketSound = sounds[0];
-        // gameOverSound = sounds[1];
-        // stageClearSound = sounds[2];        
     }
 
     void Update()
@@ -37,18 +34,19 @@ public class Movement : MonoBehaviour
         if(Input.GetKey(KeyCode.Space)) 
         {
             rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
-            // if(!rocketSound.isPlaying)
-            // {
-            //     rocketSound.Play();
-            //     rocketSound.volume = 1f;
-            // }
-            if(!audioSource.isPlaying) {
+            
+            if(!audioSource.isPlaying)
+            {
                 audioSource.PlayOneShot(rocketSound);
+            }
+
+            if(!mainBoosterParticles.isPlaying)
+            {
+                mainBoosterParticles.Play();
             }
         } else {
             audioSource.Stop();
-            // rocketSound.volume = 0f;
-            // rocketSound.Stop();
+            mainBoosterParticles.Stop();
         }
     }
     void ProcessRotation() 
@@ -56,11 +54,23 @@ public class Movement : MonoBehaviour
         if(Input.GetKey(KeyCode.A))
         {
             ApplyRotation(rotationThrust);
-
+            if(!rightThrusterParticles.isPlaying)
+            {
+                rightThrusterParticles.Play();
+            }
         }
         else if(Input.GetKey(KeyCode.D))
         {   
             ApplyRotation(-rotationThrust);
+            if(!leftThrusterParticles.isPlaying)
+            {
+                leftThrusterParticles.Play();
+            }
+        } 
+        else 
+        {
+            leftThrusterParticles.Stop();
+            rightThrusterParticles.Stop();
         }
     }
 
