@@ -13,7 +13,6 @@ public class Movement : MonoBehaviour
     [SerializeField] ParticleSystem rightThrusterParticles;
     Quaternion rotationConstraints;
 
-
     // CACHE
     Rigidbody rb;
     public AudioSource audioSource;    
@@ -33,53 +32,81 @@ public class Movement : MonoBehaviour
     void ProcessThrust() {
         if(Input.GetKey(KeyCode.Space)) 
         {
-            rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
-            
-            if(!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(rocketSound);
-            }
-
-            if(!mainBoosterParticles.isPlaying)
-            {
-                mainBoosterParticles.Play();
-            }
-        } else {
-            audioSource.Stop();
-            mainBoosterParticles.Stop();
+            StartThrusting();
+        } 
+        else 
+        {
+            StopThrusting();
         }
     }
+
     void ProcessRotation() 
     {
         if(Input.GetKey(KeyCode.A))
         {
-            ApplyRotation(rotationThrust);
-            if(!rightThrusterParticles.isPlaying)
-            {
-                rightThrusterParticles.Play();
-            }
+            RotateLeft();
         }
-        else if(Input.GetKey(KeyCode.D))
-        {   
-            ApplyRotation(-rotationThrust);
-            if(!leftThrusterParticles.isPlaying)
-            {
-                leftThrusterParticles.Play();
-            }
-        } 
-        else 
+        else if (Input.GetKey(KeyCode.D)) 
         {
-            leftThrusterParticles.Stop();
-            rightThrusterParticles.Stop();
+            RotateRight();
+        }
+        else
+        {
+            StopRotating();
         }
     }
 
-    private void ApplyRotation(float rotateThisFrame)
+    void StopRotating()
+    {
+        leftThrusterParticles.Stop();
+        rightThrusterParticles.Stop();
+    }
+
+    void RotateLeft()
+    {
+        ApplyRotation(rotationThrust);
+        if (!rightThrusterParticles.isPlaying)
+        {
+            rightThrusterParticles.Play();
+        }
+    }
+
+    void RotateRight()
+    {
+        ApplyRotation(-rotationThrust);
+        if (!leftThrusterParticles.isPlaying)
+        {
+            leftThrusterParticles.Play();
+        }
+    }
+
+    void ApplyRotation(float rotateThisFrame)
     {
         rb.freezeRotation = true; // disable third-party physics
         transform.Rotate(Vector3.forward  * Time.deltaTime * rotateThisFrame);
         rb.freezeRotation = false;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ; 
+    }
+
+    void StartThrusting()
+    {
+      rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(rocketSound);
+        }
+
+        if (!mainBoosterParticles.isPlaying)
+        {
+            mainBoosterParticles.Play();
+        }
+    } 
+
+    void StopThrusting()
+    {
+        audioSource.Stop();
+        mainBoosterParticles.Stop();
     }
 
 }
