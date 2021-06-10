@@ -19,6 +19,7 @@ public class CollisionHandler : MonoBehaviour
     bool isStageCleared = false;
     bool isAlive = true;
     bool isTransitioning = false;
+    bool isCollisionDisable = false;
 
     void Start()
     {   
@@ -28,7 +29,28 @@ public class CollisionHandler : MonoBehaviour
         movement = GetComponent<Movement>();
     }
 
-    private void OnCollisionEnter(Collision other) {
+    void Update() 
+    {
+        RespondToDebugKey();
+    }
+
+    void RespondToDebugKey() 
+    {
+        if(Input.GetKeyDown(KeyCode.L)) 
+        {
+            LoadNextLevel();
+        }
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            isCollisionDisable = !isCollisionDisable; // toggle collision
+        }
+    }
+
+    void OnCollisionEnter(Collision other) {
+
+        if(isTransitioning || isCollisionDisable ) { return; }
+
         switch(other.gameObject.tag) {
             case "Friendly":
                 break;
@@ -55,7 +77,6 @@ public class CollisionHandler : MonoBehaviour
     
     void StartCrashSequence() 
     {
-        if(isTransitioning) { return; }
 
         isTransitioning = true;
         gameOverParticles.Play();
@@ -68,7 +89,6 @@ public class CollisionHandler : MonoBehaviour
 
     void StartStageClearSequence() {
 
-        if(isTransitioning) { return; }
         stageClearParticles.Play();
         isTransitioning = true;
         movement.enabled = false;
