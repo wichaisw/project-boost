@@ -7,6 +7,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1287798135605686005, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
+      propertyPath: m_Range
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287798135605686005, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
+      propertyPath: m_Color.b
+      value: 0.24905658
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287798135605686005, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287798135605686005, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
+      propertyPath: m_Color.r
+      value: 0.9825362
+      objectReference: {fileID: 0}
     - target: {fileID: 4248271863750570647, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -53,11 +69,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5309276052647381888, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
       propertyPath: m_Name
-      value: Landing Pad
+      value: Landing Pad Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5309276052647381888, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
       propertyPath: m_TagString
       value: Finish
+      objectReference: {fileID: 0}
+    - target: {fileID: 5711078248790173108, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94f0c53f2865b1f479c5ac9d17b37a84, type: 3}
